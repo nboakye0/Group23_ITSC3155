@@ -38,8 +38,9 @@ header {
 }
 
 .index-content {
-    float: left;
-    margin: 100px;
+    margin: 0 auto;
+	clear: both;
+    display: flex;
 }
 
 .index-heading {
@@ -58,7 +59,6 @@ header {
 
 .question {
     float: right;
-    margin-right: 175px;
 }
 
 
