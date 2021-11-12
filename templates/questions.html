@@ -10,18 +10,28 @@
 </head>
 <body>
      <header>
-          <a href="index"><img class="logo" src="../static/OkieDoke.png" alt="logo"></a>
+          <a href="{{ url_for('index') }}"><img class="logo" src="../static/OkieDoke.png" alt="logo"></a>
           <nav>
                <ul class="nav_links">
-                    <li><a href="questions">Posts</a></li>
+                    <li><a href="{{ url_for('get_questions') }}">Posts</a></li>
                     <li><a href="#">Sign up</a></li>
                     <li><a href="#">Log in</a></li>
                </ul>
           </nav>
      </header>
 
-
-
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Date</th>
+        </tr>
+        {% for question in questions %}
+        <tr>
+            <td><a href="{{ url_for('get_question', question_id=question.id) }}">{{ question.title }}</a></td>
+            <td>{{ question.date }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 
 </body>
 </html>

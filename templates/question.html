@@ -10,16 +10,30 @@
 </head>
 <body>
      <header>
-          <a href="index"><img class="logo" src="../static/OkieDoke.png" alt="logo"></a>
+          <a href="{{ url_for('index') }}"><img class="logo" src="../static/OkieDoke.png" alt="logo"></a>
           <nav>
                <ul class="nav_links">
-                    <li><a href="questions">Posts</a></li>
+                    <li><a href="{{ url_for('get_questions') }}">Posts</a></li>
                     <li><a href="#">Sign up</a></li>
                     <li><a href="#">Log in</a></li>
                </ul>
           </nav>
      </header>
 
+    <h1>Question details</h1>
+
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Text</th>
+            <th>Date</th>
+        </tr>
+        <tr>
+            <td>{{ question.title }}</td>
+            <td>{{ question.details }}</td>
+            <td>{{ question.date }}</td>
+        </tr>
+    </table>
 
 </body>
 </html>
