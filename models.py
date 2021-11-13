@@ -13,9 +13,9 @@ class Question(db.Model):
     downvote = db.Column("downvote", db.Integer)
     PIN = db.Column("pin", db.Integer)   # for boolean 0 or 1
 
-    def __init__(self, title, text, date, upvote, downvote, PIN):
+    def __init__(self, title, details, date, upvote, downvote, PIN):
         self.title = title;
-        self.text = text;
+        self.details = details;
         self.date = date;
         self.upvote = upvote;
         self.downvote = downvote;

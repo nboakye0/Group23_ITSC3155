@@ -7,9 +7,9 @@ from flask import render_template  # render_template class to render HTML
 from flask import request
 from database import db
 from flask import redirect, url_for  # to redirect and use 'url_for' function
-from models import User as User
+from models import User as User        # for sign in, not needed yet
 from models import Question as Question
-from models import Answer as Answer
+from models import Answer as Answer      # for replying, not needed yet
 
 app = Flask(__name__)
 # configure database
@@ -23,13 +23,13 @@ db.init_app(app)
 with app.app_context():
     db.create_all()  # run under the app context
 
-
+# Homepage reached with / or /index
 @app.route("/")
 @app.route("/index")
 def index():
     return render_template('index.html')
 
-
+# View all questions
 @app.route("/questions")
 def get_questions():
     my_questions = db.session.query(Question).all()
@@ -43,7 +43,7 @@ def get_question(question_id):
 
     return render_template('question.html', question=my_question)
 
-
+# Create a new question
 @app.route('/questions/new', methods=['GET', 'POST'])
 def new_question():
     # check request method
