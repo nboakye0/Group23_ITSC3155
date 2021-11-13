@@ -66,3 +66,38 @@ def new_question():
     else:
         return render_template('new.html')
 
+# Edit a question from database
+@app.route('/questions/edit/<question_id>', methods=['GET', 'POST'])
+def edit_question(question_id):
+    # check method for post
+    if request.method == 'POST':
+        # get title data
+        title = request.form['title']
+        # get details of question
+        details = request.form['details']
+        question = db.session.query(Question).filter_by(id=question_id).one()
+        # update question
+        question.title = title
+        question.details = details
+        # update in DB
+        db.session.add(question)
+        db.session.commit()
+
+        return redirect(url_for('get_questions'))
+    else:
+        # GET request - show form to edit question
+        my_question = db.session.query(Question).filter_by(id=question_id).one()
+
+        return render_template('new.html', question=my_question)
+
+
+# Delete a question from database
+@app.route('/questions/delete/<question_id>', methods=['POST'])
+def delete_question(question_id):
+
+    my_question = db.session.query(Question).filter_by(id=question_id).one()
+    db.session.delete(my_question)
+    db.session.commit()
+
+    return redirect(url_for('get_questions'))
+
