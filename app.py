@@ -6,15 +6,18 @@ from flask import Flask  # Flask is the web app that we will customize
 from flask import render_template  # render_template class to render HTML
 from flask import request
 from database import db
-from flask import redirect, url_for  # to redirect and use 'url_for' function
+from flask import redirect, url_for, session  # to redirect and use 'url_for' function
 from models import User as User        # for sign in, not needed yet
 from models import Question as Question
 from models import Answer as Answer      # for replying, not needed yet
+from forms import RegisterForm
+import bcrypt
 
 app = Flask(__name__)
 # configure database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///group23.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'qwioe001032ij'
 
 #  Bind SQLAlchemy db object to this Flask app
 db.init_app(app)
@@ -100,4 +103,29 @@ def delete_question(question_id):
     db.session.commit()
 
     return redirect(url_for('get_questions'))
+
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    form = RegisterForm()
+
+    if request.method == 'POST' and form.validate_on_submit():
+        # salt and hash password
+        h_password = bcrypt.hashpw(
+            request.form['password'].encode('utf-8'), bcrypt.gensalt())
+        # get entered user data
+        first_name = request.form['firstname']
+        last_name = request.form['lastname']
+        # create user model
+        new_user = User(first_name, last_name, request.form['email'], h_password)
+        # add user to database and commit
+        db.session.add(new_user)
+        db.session.commit()
+        # save the user's name to the session
+        session['user'] = first_name
+        session['user_id'] = new_user.id  # access id value from user model of this newly added user
+        # show user dashboard view
+        return redirect(url_for('get_questions'))
+
+    # something went wrong - display register view
+    return render_template('register.html', form=form)
 
