@@ -59,25 +59,29 @@ def get_question(question_id):
 # Create a new question
 @app.route('/questions/new', methods=['GET', 'POST'])
 def new_question():
-    # check request method
-    if request.method == 'POST':
-        # get data needed
-        title = request.form['title']
-        details = request.form['details']
-        # date
-        from datetime import date
-        today = date.today()
-        today = today.strftime("%m-%d-%Y")
-        upvote = 0
-        downvote = 0
-        PIN = 0
-        new_record = Question(title, details, today, upvote, downvote, PIN)
-        db.session.add(new_record)
-        db.session.commit()
+    if session.get('user'):
+        # check request method
+        if request.method == 'POST':
+            # get data needed
+            title = request.form['title']
+            details = request.form['details']
+            # date
+            from datetime import date
+            today = date.today()
+            today = today.strftime("%m-%d-%Y")
+            upvote = 0
+            downvote = 0
+            PIN = 0
+            new_record = Question(title, details, today, upvote, downvote, PIN, session['user_id'])
+            db.session.add(new_record)
+            db.session.commit()
 
-        return redirect(url_for('get_questions'))
+            return redirect(url_for('get_questions'))
+        else:
+            return render_template('new.html', user=session['user'])
     else:
-        return render_template('new.html')
+        return redirect(url_for(login))
+
 
 # Edit a question from database
 @app.route('/questions/edit/<question_id>', methods=['GET', 'POST'])
