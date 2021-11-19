@@ -6,6 +6,8 @@ from models import User
 from database import db
 
 class RegisterForm(FlaskForm):
+    class Meta:
+        csrf = False
 
     firstname = StringField('First Name', validators=[Length(1, 20)])
 

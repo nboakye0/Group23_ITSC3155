@@ -20,7 +20,7 @@
 
     <div class="form-wrapper">
         <h2 class="title">Registration</h2>
-        <form action="/register" method="POST">
+        <form method="POST" action="/register">
             <div class="form-container">{{ form.firstname.label }} {{ form.firstname }}
                 {% if form.firstname.errors %}
                 <ul class="error">

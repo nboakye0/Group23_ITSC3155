@@ -8,7 +8,7 @@ from flask import request
 from database import db
 from flask import redirect, url_for  # to redirect and use 'url_for' function
 from flask import session
-from models import User as User        # for sign in, not needed yet
+from models import User as User
 from models import Question as Question
 from models import Answer as Answer      # for replying, not needed yet
 from forms import RegisterForm
@@ -19,7 +19,7 @@ app = Flask(__name__)
 # configure database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///group23.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'qwioe001032ij'
+app.config['SECRET_KEY'] = 'QWQW001032IJ'
 
 #  Bind SQLAlchemy db object to this Flask app
 db.init_app(app)
