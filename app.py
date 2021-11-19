@@ -68,13 +68,13 @@ def new_question():
         upvote = 0
         downvote = 0
         PIN = 0
-        new_record = Question(title, details, today, upvote, downvote, PIN)
+        new_record = Question(title, details, today, upvote, downvote, PIN, session['user_id'])
         db.session.add(new_record)
         db.session.commit()
 
         return redirect(url_for('get_questions'))
     else:
-        return render_template('new.html')
+        return render_template('new.html', user=session['user'])
 
 # Edit a question from database
 @app.route('/questions/edit/<question_id>', methods=['GET', 'POST'])
