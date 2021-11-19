@@ -35,13 +35,16 @@ def index():
 # View all questions
 @app.route("/questions")
 def get_questions():
-    my_questions = db.session.query(Question).all()
-
-    return render_template('questions.html', questions=my_questions)
+    if session.get('user'):
+        my_questions = db.session.query(Question).all()
+        return render_template('questions.html', questions=my_questions, user=session['user'])
+    else:
+        return redirect(url_for('login'))
 
 # View individual question
 @app.route("/questions/<question_id>")
 def get_question(question_id):
+
     my_question = db.session.query(Question).filter_by(id=question_id).one()
 
     return render_template('question.html', question=my_question)
