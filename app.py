@@ -10,7 +10,7 @@ from flask import redirect, url_for  # to redirect and use 'url_for' function
 from flask import session
 from models import User as User
 from models import Question as Question
-from models import Answer as Answer      # for replying, not needed yet
+from models import Answer as Answer  # for replying, not needed yet
 from forms import RegisterForm
 import bcrypt
 from forms import LoginForm
@@ -28,6 +28,7 @@ db.init_app(app)
 with app.app_context():
     db.create_all()  # run under the app context
 
+
 # Homepage reached with / or /index
 @app.route("/")
 @app.route("/index")
@@ -35,6 +36,7 @@ def index():
     if session.get('user'):
         return render_template('index.html', user=session['user'])
     return render_template("index.html")
+
 
 # View all questions
 @app.route("/questions")
@@ -45,36 +47,41 @@ def get_questions():
     else:
         return redirect(url_for('login'))
 
+
 # View individual question
 @app.route("/questions/<question_id>")
 def get_question(question_id):
-
     my_question = db.session.query(Question).filter_by(id=question_id).one()
 
     return render_template('question.html', question=my_question)
 
+
 # Create a new question
 @app.route('/questions/new', methods=['GET', 'POST'])
 def new_question():
-    # check request method
-    if request.method == 'POST':
-        # get data needed
-        title = request.form['title']
-        details = request.form['details']
-        # date
-        from datetime import date
-        today = date.today()
-        today = today.strftime("%m-%d-%Y")
-        upvote = 0
-        downvote = 0
-        PIN = 0
-        new_record = Question(title, details, today, upvote, downvote, PIN)
-        db.session.add(new_record)
-        db.session.commit()
+    if session.get('user'):
+        # check request method
+        if request.method == 'POST':
+            # get data needed
+            title = request.form['title']
+            details = request.form['details']
+            # date
+            from datetime import date
+            today = date.today()
+            today = today.strftime("%m-%d-%Y")
+            upvote = 0
+            downvote = 0
+            PIN = 0
+            new_record = Question(title, details, today, upvote, downvote, PIN, session['user_id'])
+            db.session.add(new_record)
+            db.session.commit()
 
-        return redirect(url_for('get_questions'))
+            return redirect(url_for('get_questions'))
+        else:
+            return render_template('new.html', user=session['user'])
     else:
-        return render_template('new.html')
+        return redirect(url_for('login'))
+
 
 # Edit a question from database
 @app.route('/questions/edit/<question_id>', methods=['GET', 'POST'])
@@ -104,12 +111,12 @@ def edit_question(question_id):
 # Delete a question from database
 @app.route('/questions/delete/<question_id>', methods=['POST'])
 def delete_question(question_id):
-
     my_question = db.session.query(Question).filter_by(id=question_id).one()
     db.session.delete(my_question)
     db.session.commit()
 
     return redirect(url_for('get_questions'))
+
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
@@ -160,3 +167,11 @@ def login():
         # form did not validate or GET request
         return render_template("login.html", form=login_form)
 
+
+@app.route('/logout')
+def logout():
+    # check if a user is saved in session
+    if session.get('user'):
+        session.clear()
+
+    return redirect(url_for('index'))

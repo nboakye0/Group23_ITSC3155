@@ -9,17 +9,20 @@
     <body>
     <header>
           <a href="{{ url_for('index') }}"><img class="logo" src="../static/OkieDoke.png" alt="logo"></a>
-          <nav>
-               <ul class="nav_links">
-                    <li><a href="{{ url_for('get_questions') }}">Posts</a></li>
-                    <li><a href="{{ url_for('register') }}">Sign up</a></li>
-                    <li><a href="#">Log in</a></li>
-               </ul>
-          </nav>
-    </header>
-        <h1>Welcome {% if user %}{{user}}{% endif %}to the 49er Notes App!</h1>
+        {% if user %}
+            <nav>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </nav>
+        {% else %}
+            <nav>
+                <a href="{{ url_for('register') }}">Register</a>
+            </nav>
+        {% endif %}
 
-        <h2>Use this site to maintain and organize your notes.</h2>
+    </header>
+        <h1>Welcome {% if user %}{{user}}{% endif %}to the OkieDokie Q&A app!</h1>
+
+        <h2>Use this site to ask questions and/or answer questions.</h2>
         <div class="form-wrapper">
             <h2 class="title">Login</h2>
             <form method="POST" action="/login">

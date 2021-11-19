@@ -9,13 +9,18 @@
 <body>
     <header>
           <a href="{{ url_for('index') }}"><img class="logo" src="../static/OkieDoke.png" alt="logo"></a>
-          <nav>
-               <ul class="nav_links">
+
+          {% if user %}
+                <nav>
                     <li><a href="{{ url_for('get_questions') }}">Posts</a></li>
-                    <li><a href="#">Sign up</a></li>
-                    <li><a href="#">Log in</a></li>
-               </ul>
-          </nav>
+                    <li><a href="{{ url_for('new_question') }}">Ask a Question</a></li>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                </nav>
+          {% else %}
+                <nav>
+                    <a href="{{ url_for('login') }}">Sign in</a>
+                </nav>
+          {% endif %}
     </header>
 
     <div class="form-wrapper">

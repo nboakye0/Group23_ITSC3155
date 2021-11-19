@@ -11,13 +11,22 @@
 <body>
      <header>
           <a href="{{ url_for('index') }}"><img class="logo" src="../static/OkieDoke.png" alt="logo"></a>
-          <nav>
-               <ul class="nav_links">
+
+         {% if user %}
+            <nav>
+                <ul class="nav_links">
                     <li><a href="{{ url_for('get_questions') }}">Posts</a></li>
-                    <li><a href="{{ url_for('register') }}">Sign up</a></li>
-                    <li><a href="#">Log in</a></li>
-               </ul>
-          </nav>
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                </ul>
+            </nav>
+         {% else %}
+            <nav>
+                <ul class="nav_links">
+                    <li><a href="{{ url_for('login') }}">Sign in</a><li>
+                    <li><a href="{{ url_for('register') }}">Register</a><li>
+                </ul>
+            </nav>
+         {% endif %}
      </header>
 
      <main class="index-content">
