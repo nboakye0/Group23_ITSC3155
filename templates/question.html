@@ -37,5 +37,25 @@
         </tr>
     </table>
 
+         {% if question.replies %}
+          {% if question.replies|length > 0 %}
+               <h2>Replies</h2>
+               <ul>
+               {% for reply in question.replies %}
+                    <li>{{ reply.text }}</li>
+               {% endfor %}
+               </ul>
+          {% endif %}
+     {% endif %}
+     <form action="{{ url_for('new_reply', question_id=question.id) }}" method="post">
+          <div class="form-wrapper">
+               <h2 class="title">Add a reply</h2>
+                    <div class="form-container">
+                         {{ form.reply.label }} <br /> {{ form.reply }}
+                    </div>
+               {{ form.submit }}
+          </div>
+     </form>
+
 </body>
 </html>

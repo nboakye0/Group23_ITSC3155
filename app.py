@@ -10,10 +10,9 @@ from flask import redirect, url_for  # to redirect and use 'url_for' function
 from flask import session
 from models import User as User
 from models import Question as Question
-from models import Answer as Answer  # for replying, not needed yet
-from forms import RegisterForm
+from models import Reply as Reply
+from forms import RegisterForm, LoginForm, ReplyForm
 import bcrypt
-from forms import LoginForm
 
 app = Flask(__name__)
 # configure database
@@ -51,9 +50,14 @@ def get_questions():
 # View individual question
 @app.route("/questions/<question_id>")
 def get_question(question_id):
-    my_question = db.session.query(Question).filter_by(id=question_id).one()
+    if session.get('user'):
+        my_question = db.session.query(Question).filter_by(id=question_id).one()
 
-    return render_template('question.html', question=my_question)
+        form = ReplyForm()
+
+        return render_template('question.html', question=my_question, user=session['user'], form=form)
+    else:
+        return redirect(url_for('login'))
 
 
 # Create a new question
@@ -166,6 +170,22 @@ def login():
     else:
         # form did not validate or GET request
         return render_template("login.html", form=login_form)
+
+
+@app.route('/questions/<question_id>/reply', methods=['POST'])
+def new_reply(question_id):
+    if session.get('user'):
+        reply_form = ReplyForm()
+        if reply_form.validate_on_submit():
+            reply_details = request.form['reply']
+            new_reply = Reply(reply_details, int(question_id), 0, 0, 0, session['user_id'])
+            db.session.add(new_reply)
+            db.session.commit()
+
+        return redirect(url_for('get_question', question_id=question_id))
+
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route('/logout')
