@@ -73,10 +73,7 @@ def new_question():
             from datetime import date
             today = date.today()
             today = today.strftime("%m-%d-%Y")
-            upvote = 0
-            downvote = 0
-            PIN = 0
-            new_record = Question(title, details, today, upvote, downvote, PIN, session['user_id'])
+            new_record = Question(title, details, today, 0, 0, 0, session['user_id'])
             db.session.add(new_record)
             db.session.commit()
 
@@ -187,6 +184,34 @@ def new_reply(question_id):
     else:
         return redirect(url_for('login'))
 
+
+@app.route('/questions/<question_id>/upvote', methods=['POST'])
+def upvote(question_id):
+    if request.method == 'POST':
+        # add +1 to current upvote
+        question = db.session.query(Question).filter_by(id=question_id).one()
+        question.upvote = question.upvote + 1
+        db.session.add(question)
+        db.session.commit()
+
+        return str(question.upvote)
+    else:
+        return redirect(url_for('index'))
+
+
+@app.route('/questions/<question_id>/downvote', methods=['POST'])
+def downvote(question_id):
+    if request.method == 'POST':
+        # -1 to downvote
+        question = db.session.query(Question).filter_by(id=question_id).one()
+        question.upvote = question.upvote - 1
+        question.downvote = question.downvote + 1
+        db.session.add(question)
+        db.session.commit()
+
+        return str(question.upvote)
+    else:
+        return redirect(url_for('index'))
 
 @app.route('/logout')
 def logout():

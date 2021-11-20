@@ -7,6 +7,7 @@
      <title>OkieDoke Q&A</title>
      <!-- styles -->
      <link rel="stylesheet" href="../static/main.css">
+     <script src="../static/scripts.js"></script>
 </head>
 <body>
      <header>
@@ -21,41 +22,53 @@
      </header>
 
      <button><a href="{{ url_for('new_question') }}">Post a Question</a></button>
-
-    <h1>Question details</h1>
-
-    <table>
-        <tr>
-            <th>Title</th>
-            <th>Text</th>
-            <th>Date</th>
-        </tr>
-        <tr>
-            <td>{{ question.title }}</td>
-            <td>{{ question.details }}</td>
-            <td>{{ question.date }}</td>
-        </tr>
-    </table>
-
-         {% if question.replies %}
-          {% if question.replies|length > 0 %}
-               <h2>Replies</h2>
-               <ul>
-               {% for reply in question.replies %}
-                    <li>{{ reply.text }}</li>
-               {% endfor %}
-               </ul>
-          {% endif %}
-     {% endif %}
-     <form action="{{ url_for('new_reply', question_id=question.id) }}" method="post">
-          <div class="form-wrapper">
-               <h2 class="title">Add a reply</h2>
-                    <div class="form-container">
-                         {{ form.reply.label }} <br /> {{ form.reply }}
+    <div class="center">
+        <h1>Question details</h1>
+            <div class="buttongroup">
+                <div id="vote-arrow">
+                    <button id="upvote" class="vote">
+                        <span class="sprite">&#9650;</span>
+                    </button>
+                    <div id="votesup">
+                        {{ question.upvote }}
                     </div>
-               {{ form.submit }}
-          </div>
-     </form>
+                    <button id="downvote" class="vote">
+                        <span class="sprite">&#9660;</span>
+                    </button>
+                </div>
+            </div>
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Text</th>
+                <th>Date</th>
+            </tr>
+            <tr>
+                <td>{{ question.title }}</td>
+                <td>{{ question.details }}</td>
+                <td>{{ question.date }}</td>
+            </tr>
+        </table>
 
+             {% if question.replies %}
+              {% if question.replies|length > 0 %}
+                   <h2>Replies</h2>
+                   <ul>
+                   {% for reply in question.replies %}
+                        <li>{{ reply.text }}</li>
+                   {% endfor %}
+                   </ul>
+              {% endif %}
+         {% endif %}
+         <form action="{{ url_for('new_reply', question_id=question.id) }}" method="post">
+              <div class="form-wrapper">
+                   <h2 class="title">Add a reply</h2>
+                        <div class="form-container">
+                             {{ form.reply.label }} <br /> {{ form.reply }}
+                        </div>
+                   {{ form.submit }}
+              </div>
+         </form>
+    </div>
 </body>
 </html>
