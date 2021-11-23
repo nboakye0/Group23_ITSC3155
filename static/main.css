@@ -1,10 +1,11 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: 'Open Sans', sans-serif;
+    background-color:
 }
 
 li, a {
-    font-family: "Helvetica", sans-serif;
     font-weight: 500;
     font-size: 20px;
     text-decoration: none;
@@ -41,11 +42,23 @@ header {
     margin: 0 auto;
 	clear: both;
     display: flex;
+    flex-direction: row;
+    padding-left: 120px;
+    padding-right: 120px;
+}
+
+.width-container {
+
+}
+
+.left {
+    width: 90%;
+    font-size: 20px;
 }
 
 .index-heading {
     color: #E27D60;
-    font-size: 3em;
+    font-size: 1.2em;
     margin-bottom: 8px;
 }
 
@@ -54,15 +67,28 @@ header {
 }
 
 .intro {
-    font-size: 1.2em;
+    font-size: 1.1em;
 }
 
 .question {
-    float: right;
+    border-radius: 5px;
+    height: 300px;
+    width: 500px;
 }
 
 .center {
     max-width: 500px;
     margin: auto;
+}
+
+.post-question {
+    padding: 10px;
+    background-color: lightblue;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.posta {
+    color: white;
 }
 
