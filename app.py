@@ -41,8 +41,8 @@ def index():
 @app.route("/questions")
 def get_questions():
     if session.get('user'):
-        my_questions = db.session.query(Question).filter_by(user_id=session['user_id']).all()
-        return render_template('questions.html', questions=my_questions, user=session['user'])
+        my_questions = db.session.query(Question).all()
+        return render_template('questions.html', questions=my_questions, user=session['user'], user_id=session['user_id'])
     else:
         return redirect(url_for('login'))
 
@@ -81,7 +81,7 @@ def new_question():
         else:
             return render_template('new.html', user=session['user'])
     else:
-        return redirect(url_for(login))
+        return redirect(url_for('login'))
 
 
 # Edit a question from database

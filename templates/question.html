@@ -21,9 +21,10 @@
           </nav>
      </header>
 
-     <button><a href="{{ url_for('new_question') }}">Post a Question</a></button>
+     <button class="post-question"><a href="{{ url_for('new_question') }}">Post a Question</a></button>
     <div class="center">
-        <h1>Question details</h1>
+        <div class="titleflex">
+            <h1>Question details</h1>
             <div class="buttongroup">
                 <div id="vote-arrow">
                     <button id="upvote" class="vote">
@@ -37,19 +38,22 @@
                     </button>
                 </div>
             </div>
+        </div>
         <table>
-            <tr>
-                <th>Title</th>
-                <th>Text</th>
-                <th>Date</th>
-            </tr>
-            <tr>
-                <td>{{ question.title }}</td>
+            <tr class="question-table">
+                <td class="question-title">{{ question.title }}</td>
                 <td>{{ question.details }}</td>
                 <td>{{ question.date }}</td>
             </tr>
         </table>
-
+        <form action="{{ url_for('new_reply', question_id=question.id) }}" method="post">
+              <div class="form-wrapper">
+                        <div class="form-container">
+                             {{ form.reply.label }} <br /> {{ form.reply }}
+                        </div>
+                   {{ form.submit }}
+              </div>
+         </form>
              {% if question.replies %}
               {% if question.replies|length > 0 %}
                    <h2>Replies</h2>
@@ -60,15 +64,7 @@
                    </ul>
               {% endif %}
          {% endif %}
-         <form action="{{ url_for('new_reply', question_id=question.id) }}" method="post">
-              <div class="form-wrapper">
-                   <h2 class="title">Add a reply</h2>
-                        <div class="form-container">
-                             {{ form.reply.label }} <br /> {{ form.reply }}
-                        </div>
-                   {{ form.submit }}
-              </div>
-         </form>
+
     </div>
 </body>
 </html>
