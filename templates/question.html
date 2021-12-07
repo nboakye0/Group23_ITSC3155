@@ -43,6 +43,9 @@
             <tr class="question-table">
                 <td class="question-title">{{ question.title }}</td>
                 <td>{{ question.details }}</td>
+                {% if question.image %}
+                <td><img src="data:image/*;base64, {{ image }}" width="700" alt="uploaded image"></td>
+                {% endif %}
                 <td>{{ question.date }}</td>
             </tr>
         </table>

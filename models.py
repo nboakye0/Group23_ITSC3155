@@ -1,6 +1,7 @@
 from database import db
 import datetime
 
+
 class User(db.Model):
     id = db.Column("id", db.Integer, primary_key=True)
     first_name = db.Column("first_name", db.String(100))
@@ -18,25 +19,29 @@ class User(db.Model):
         self.password = password
         self.registered_on = datetime.date.today()
 
+
 class Question(db.Model):
     id = db.Column("id", db.Integer, primary_key=True)
     title = db.Column("title", db.String(200))
     details = db.Column("details", db.String(700))
     date = db.Column("date", db.String(100))
+    image = db.Column("image", db.BLOB)
     upvote = db.Column("upvote", db.Integer)
     downvote = db.Column("downvote", db.Integer)
     PIN = db.Column("pin", db.Integer)   # for boolean 0 or 1
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     replies = db.relationship("Reply", backref="question", cascade="all, delete-orphan", lazy=True)
 
-    def __init__(self, title, details, date, upvote, downvote, PIN, user_id):
+    def __init__(self, title, details, date, image, upvote, downvote, pin, user_id):
         self.title = title
         self.details = details
         self.date = date
+        self.image = image
         self.upvote = upvote
         self.downvote = downvote
-        self.PIN = PIN
+        self.PIN = pin
         self.user_id = user_id
+
 
 class Reply(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -48,11 +53,11 @@ class Reply(db.Model):
     PIN = db.Column(db.Integer)   # for boolean 0 or 1
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
-    def __init__(self, text, question_id, upvote, downvote, PIN, user_id):
+    def __init__(self, text, question_id, upvote, downvote, pin, user_id):
         self.date = datetime.date.today()
         self.text = text
         self.question_id = question_id
         self.upvote = upvote
         self.downvote = downvote
-        self.PIN = PIN
+        self.PIN = pin
         self.user_id = user_id

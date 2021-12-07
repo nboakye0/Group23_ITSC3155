@@ -6,13 +6,15 @@ from flask import Flask  # Flask is the web app that we will customize
 from flask import render_template  # render_template class to render HTML
 from flask import request
 from database import db
-from flask import redirect, url_for  # to redirect and use 'url_for' function
+from werkzeug.utils import secure_filename
+from flask import redirect, url_for, flash  # to redirect and use 'url_for' function
 from flask import session
 from models import User as User
 from models import Question as Question
 from models import Reply as Reply
 from forms import RegisterForm, LoginForm, ReplyForm
 import bcrypt
+from base64 import b64encode
 
 app = Flask(__name__)
 # configure database
@@ -54,8 +56,10 @@ def get_question(question_id):
         my_question = db.session.query(Question).filter_by(id=question_id).one()
 
         form = ReplyForm()
+        image = b64encode(my_question.image).decode("utf-8")
 
-        return render_template('question.html', question=my_question, user=session['user'], form=form)
+
+        return render_template('question.html', question=my_question, image=image, user=session['user'], form=form)
     else:
         return redirect(url_for('login'))
 
@@ -73,7 +77,8 @@ def new_question():
             from datetime import date
             today = date.today()
             today = today.strftime("%m-%d-%Y")
-            new_record = Question(title, details, today, 0, 0, 0, session['user_id'])
+            file_name = request.files['image']
+            new_record = Question(title, details, today, file_name.read(), 0, 0, 0, session['user_id'])
             db.session.add(new_record)
             db.session.commit()
 
@@ -175,8 +180,8 @@ def new_reply(question_id):
         reply_form = ReplyForm()
         if reply_form.validate_on_submit():
             reply_details = request.form['reply']
-            new_reply = Reply(reply_details, int(question_id), 0, 0, 0, session['user_id'])
-            db.session.add(new_reply)
+            reply = Reply(reply_details, int(question_id), 0, 0, 0, session['user_id'])
+            db.session.add(reply)
             db.session.commit()
 
         return redirect(url_for('get_question', question_id=question_id))
@@ -212,6 +217,7 @@ def downvote(question_id):
         return str(question.upvote)
     else:
         return redirect(url_for('index'))
+
 
 @app.route('/logout')
 def logout():
