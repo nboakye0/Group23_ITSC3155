@@ -44,7 +44,8 @@ def index():
 def get_questions():
     if session.get('user'):
         my_questions = db.session.query(Question).all()
-        return render_template('questions.html', questions=my_questions, user=session['user'], user_id=session['user_id'])
+        return render_template('questions.html', questions=my_questions, user=session['user'],
+                               user_id=session['user_id'])
     else:
         return redirect(url_for('login'))
 
@@ -57,7 +58,6 @@ def get_question(question_id):
 
         form = ReplyForm()
         image = b64encode(my_question.image).decode("utf-8")
-
 
         return render_template('question.html', question=my_question, image=image, user=session['user'], form=form)
     else:
@@ -136,7 +136,7 @@ def register():
         first_name = request.form['firstname']
         last_name = request.form['lastname']
         # create user model
-        new_user = User(first_name, last_name, request.form['email'], h_password)
+        new_user = User(first_name, last_name, request.form['email'], h_password,)
         # add user to database and commit
         db.session.add(new_user)
         db.session.commit()
@@ -226,3 +226,13 @@ def logout():
         session.clear()
 
     return redirect(url_for('index'))
+
+
+@app.route('/user')
+def profile():
+    if session.get('user'):
+        return render_template('profile.html', user=session['user'])
+    else:
+        return redirect(url_for('login'))
+
+

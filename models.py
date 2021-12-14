@@ -11,6 +11,8 @@ class User(db.Model):
     registered_on = db.Column(db.DateTime, nullable=False)
     questions = db.relationship("Question", backref="user", lazy=True)
     replies = db.relationship("Reply", backref="user", lazy=True)
+    about_me = db.Column(db.String(140))
+    quote = db.Column(db.String(60))
 
     def __init__(self, first_name, last_name, email, password):
         self.first_name = first_name

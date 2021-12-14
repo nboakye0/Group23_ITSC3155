@@ -11,6 +11,8 @@
           <a href="{{ url_for('index') }}"><img class="logo" src="../static/OkieDoke.png" alt="logo"></a>
         {% if user %}
             <nav>
+                <a href="{{ url_for('new_question') }}">Post a Question</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
                 <a href="{{ url_for('logout') }}">Logout</a>
             </nav>
         {% else %}

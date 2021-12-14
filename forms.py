@@ -5,6 +5,7 @@ from wtforms import ValidationError
 from models import User
 from database import db
 
+
 class RegisterForm(FlaskForm):
     class Meta:
         csrf = False
@@ -56,3 +57,5 @@ class ReplyForm(FlaskForm):
 
     reply = TextAreaField('Reply', validators=[Length(min=1)])
     submit = SubmitField('Reply')
+
+
